@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Scope Desk — Web · Mobile · API Writeups</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #12161c;
+      --ink-soft: #3a4450;
+      --muted: #6b7785;
+      --line: #d5dde6;
+      --paper: #f3f6f9;
+      --card: #ffffff;
+      --web: #0b6e4f;
+      --web-bg: #e6f4ee;
+      --mobile: #1a4f8c;
+      --mobile-bg: #e8f0f8;
+      --api: #8a4b12;
+      --api-bg: #f8efe4;
+      --accent: #c4452d;
+      --shadow: 0 1px 0 rgba(18, 22, 28, 0.04), 0 8px 24px rgba(18, 22, 28, 0.06);
+      --radius: 10px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: "DM Sans", system-ui, sans-serif;
+      background:
+        radial-gradient(ellipse 80% 50% at 10% -10%, #dfeaf5 0%, transparent 55%),
+        radial-gradient(ellipse 60% 40% at 100% 0%, #e8efe6 0%, transparent 50%),
+        linear-gradient(180deg, #eef2f6 0%, var(--paper) 40%, #e9eef3 100%);
+      background-attachment: fixed;
+    }
+
+    .noise {
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      z-index: 0;
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      width: min(1120px, calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 2.25rem 0 4rem;
+    }
+
+    header.hero {
+      display: grid;
+      gap: 1.25rem;
+      margin-bottom: 1.75rem;
+      animation: rise 0.55s ease-out both;
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .brand-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.75rem 1.5rem;
+    }
+
+    .brand {
+      font-family: "Newsreader", Georgia, serif;
+      font-size: clamp(2rem, 4.5vw, 2.85rem);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin: 0;
+    }
+
+    .brand span {
+      color: var(--accent);
+    }
+
+    .scope-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .pill {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.65rem;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--card);
+    }
+    .pill.web { color: var(--web); background: var(--web-bg); border-color: #b7d9c9; }
+    .pill.mobile { color: var(--mobile); background: var(--mobile-bg); border-color: #b9cce3; }
+    .pill.api { color: var(--api); background: var(--api-bg); border-color: #e2c9a8; }
+
+    .lede {
+      max-width: 38rem;
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 1.05rem;
+      line-height: 1.55;
+    }
+
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem 1.5rem;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .stats strong {
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1rem;
+      margin-bottom: 1.25rem;
+      animation: rise 0.55s ease-out 0.08s both;
+    }
+
+    .controls {
+      display: grid;
+      gap: 0.85rem;
+    }
+
+    .search-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.6rem;
+    }
+
+    input[type="search"],
+    select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0.7rem 0.85rem;
+      font: inherit;
+      font-size: 0.95rem;
+      background: #fafbfc;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    input[type="search"]:focus,
+    select:focus {
+      border-color: #8aa3bc;
+      box-shadow: 0 0 0 3px rgba(26, 79, 140, 0.12);
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      align-items: center;
+    }
+
+    .tab {
+      appearance: none;
+      border: 1px solid var(--line);
+      background: #f7f9fb;
+      color: var(--ink-soft);
+      font: inherit;
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 0.45rem 0.8rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.12s;
+    }
+    .tab:hover { border-color: #b6c3d1; transform: translateY(-1px); }
+    .tab.active {
+      color: var(--ink);
+      background: var(--ink);
+      color: #fff;
+      border-color: var(--ink);
+    }
+    .tab:focus-visible {
+      outline: 2px solid var(--mobile);
+      outline-offset: 2px;
+    }
+
+    .meta-filters {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.6rem;
+    }
+
+    @media (max-width: 720px) {
+      .search-row,
+      .meta-filters { grid-template-columns: 1fr; }
+    }
+
+    .list {
+      display: grid;
+      gap: 0.7rem;
+    }
+
+    article.card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1rem 1.1rem 0.95rem;
+      box-shadow: var(--shadow);
+      transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+      animation: rise 0.4s ease-out both;
+    }
+    article.card:hover {
+      border-color: #b7c5d4;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(18, 22, 28, 0.09);
+    }
+
+    .card-top {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 0.55rem;
+    }
+
+    .tag {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      padding: 0.22rem 0.5rem;
+      border-radius: 5px;
+    }
+    .tag.web { color: var(--web); background: var(--web-bg); }
+    .tag.mobile { color: var(--mobile); background: var(--mobile-bg); }
+    .tag.api { color: var(--api); background: var(--api-bg); }
+
+    .title {
+      margin: 0 0 0.55rem;
+      font-size: 1.05rem;
+      font-weight: 600;
+      line-height: 1.35;
+      letter-spacing: -0.015em;
+    }
+    .title a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .title a:hover { color: var(--accent); }
+    .title a:focus-visible {
+      outline: 2px solid var(--mobile);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    .bugs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-bottom: 0.7rem;
+    }
+    .bug {
+      font-size: 0.75rem;
+      color: var(--ink-soft);
+      background: #f0f3f7;
+      border: 1px solid #e2e8ef;
+      border-radius: 999px;
+      padding: 0.18rem 0.55rem;
+    }
+
+    .foot {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem 1rem;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .foot .mono {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.75rem;
+    }
+    .bounty {
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .authors { color: var(--ink-soft); }
+
+    .empty, .loading, .error {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--muted);
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.55);
+    }
+    .error { color: var(--accent); border-color: #efc4bb; background: #fff6f4; }
+
+    .pager {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 1.25rem;
+    }
+    .pager button {
+      appearance: none;
+      border: 1px solid var(--line);
+      background: var(--card);
+      border-radius: 8px;
+      padding: 0.5rem 0.9rem;
+      font: inherit;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+    .pager button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .pager button:not(:disabled):hover {
+      border-color: #a8b7c8;
+    }
+
+    footer.note {
+      margin-top: 2rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+  <div class="wrap">
+    <header class="hero">
+      <div class="brand-row">
+        <h1 class="brand">Scope <span>Desk</span></h1>
+        <div class="scope-pills" aria-label="Included scopes">
+          <span class="pill web">Web</span>
+          <span class="pill mobile">Mobile</span>
+          <span class="pill api">API</span>
+        </div>
+      </div>
+      <p class="lede">
+        Bug bounty writeups from your library — web, mobile, and API only.
+        Network / binary / local-privilege noise is filtered out.
+      </p>
+      <div class="stats" id="stats">Loading reports…</div>
+    </header>
+
+    <section class="panel" aria-label="Filters">
+      <div class="controls">
+        <div class="search-row">
+          <input type="search" id="q" placeholder="Search title, bug, author, program…" autocomplete="off" />
+          <button class="tab" type="button" id="clearBtn" title="Clear filters">Clear</button>
+        </div>
+        <div class="filters" role="tablist" aria-label="Surface">
+          <button class="tab active" data-cat="all" type="button">All</button>
+          <button class="tab" data-cat="web" type="button">Web</button>
+          <button class="tab" data-cat="mobile" type="button">Mobile</button>
+          <button class="tab" data-cat="api" type="button">API</button>
+        </div>
+        <div class="meta-filters">
+          <select id="bugFilter" aria-label="Bug class">
+            <option value="">All bug classes</option>
+          </select>
+          <select id="sort" aria-label="Sort">
+            <option value="newest">Newest published</option>
+            <option value="oldest">Oldest published</option>
+            <option value="added">Recently added</option>
+            <option value="title">Title A–Z</option>
+          </select>
+          <select id="pageSize" aria-label="Page size">
+            <option value="25">25 / page</option>
+            <option value="50" selected>50 / page</option>
+            <option value="100">100 / page</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <div id="status" class="loading" hidden>Loading…</div>
+    <div id="list" class="list" aria-live="polite"></div>
+    <div class="pager" id="pager" hidden>
+      <button type="button" id="prev">Previous</button>
+      <span class="mono" id="pageInfo"></span>
+      <button type="button" id="next">Next</button>
+    </div>
+    <footer class="note">Sourced from <code>reports.json</code> · network articles excluded</footer>
+  </div>
+
+  <script>
+    const MOBILE_RE = /\b(android|ios|mobile|apk|ipa|deeplink|deep[\s-]?link|webview|intent|frida|certificate[\s-]?pinn|ssl[\s-]?pinn|okhttp|exported[\s-]?(activity|component)|insecure[\s-]?deeplink|insecure[\s-]?intent|improper export of android)\b/i;
+    const API_RE = /\b(api|graphql|jwt|rest\b|soap\b|grpc|swagger|openapi|mass[\s-]?assignment|webhook|rate[\s-]?limit|idor|broken[\s-]?(authori|access)|missing[\s-]?auth|oauth|oidc|saml|sso|token[\s-]?leak|hardcoded[\s-]?api|soql|nosql|graphql)\b/i;
+    const WEB_RE = /\b(xss|csrf|ssrf|sql[\s-]?inject|sqli|soql|cors|clickjack|csp|open[\s-]?redirect|path[\s-]?travers|lfi|rfi|xxe|ssti|csti|file[\s-]?upload|subdomain[\s-]?takeover|cache[\s-]?(poison|decept)|request[\s-]?smuggl|http[\s-]?(param|response|request)|host[\s-]?header|postmessage|prototype[\s-]?pollut|account[\s-]?takeover|password[\s-]?reset|session|cookie|dom[\s-]?xss|stored[\s-]?xss|reflected[\s-]?xss|blind[\s-]?xss|self[\s-]?xss|html[\s-]?inject|crlf|directory[\s-]?list|web[\s-]?cache|browser|waf[\s-]?bypass|sop[\s-]?bypass|phishing|payment|logic[\s-]?flaw|race[\s-]?condition|authenti|authori|information[\s-]?disclosure|insecure[\s-]?deserial|dependency[\s-]?confusion|command[\s-]?inject|arbitrary[\s-]?file|ci\/?cd|supply[\s-]?chain|cloud|aws|s3|unrestricted[\s-]?file|cross[\s-]?tenant|parameter[\s-]?tamper|url[\s-]?validation|403[\s-]?bypass|email[\s-]?verif|otp[\s-]?bypass|2fa|mfa|bruteforce|default[\s-]?credential|hardcoded[\s-]?credential|security[\s-]?misconfig|mass[\s-]?assignment|llm|prompt[\s-]?inject|ai\b)\b/i;
+    const NETWORK_RE = /\b(wifi|wi-?fi|wireless|bluetooth|bgp|vlan|layer[\s-]?2|udp[\s-]?spoof|tcp[\s-]?inject|packet[\s-]?(captur|inject|sniff)|firewall|router[\s-]?hack|ipsec|scada|ics\b|can[\s-]?bus|radio[\s-]?hack|firmware|hardware[\s-]?hack|mdns|networking|network[\s-]?protocol|802\.11|pcap)\b/i;
+    const BINARY_RE = /\b(memory[\s-]?corrupt|buffer[\s-]?overflow|heap[\s-]?(overflow|buffer)|use-?after-?free|kernel[\s-]?(hack|dos)|local[\s-]?privilege|dll[\s-]?hijack|windows[\s-]?driver|format[\s-]?string|integer[\s-]?(overflow|underflow)|active[\s-]?directory|kerberos|rdp\b|windows\b|macos\b|linux[\s-]?kernel)\b/i;
+
+    const state = {
+      all: [],
+      cat: "all",
+      q: "",
+      bug: "",
+      sort: "newest",
+      page: 1,
+      pageSize: 50,
+    };
+
+    function haystack(item) {
+      const links = item.Links || [];
+      const title = links[0]?.Title || "";
+      const bugs = (item.Bugs || []).join(" ");
+      const programs = (item.Programs || []).join(" ");
+      const authors = (item.Authors || []).join(" ");
+      return `${title} ${bugs} ${programs} ${authors}`;
+    }
+
+    function classify(item) {
+      const t = haystack(item);
+      const isMobile = MOBILE_RE.test(t);
+      const isApi = API_RE.test(t);
+      const isWeb = WEB_RE.test(t);
+      const isNetwork = NETWORK_RE.test(t);
+      const isBinaryOnly = BINARY_RE.test(t) && !(isMobile || isWeb || isApi);
+
+      if (isNetwork && !(isMobile || isWeb || isApi)) return null;
+      if (isBinaryOnly) return null;
+      if (!(isMobile || isWeb || isApi)) return null;
+
+      const cats = [];
+      if (isWeb) cats.push("web");
+      if (isMobile) cats.push("mobile");
+      if (isApi) cats.push("api");
+      return cats;
+    }
+
+    function titleOf(item) {
+      return (item.Links && item.Links[0] && item.Links[0].Title) || "Untitled";
+    }
+
+    function linkOf(item) {
+      return (item.Links && item.Links[0] && item.Links[0].Link) || "#";
+    }
+
+    function parseDate(s) {
+      if (!s || s === "-") return 0;
+      const t = Date.parse(s);
+      return Number.isFinite(t) ? t : 0;
+    }
+
+    function filtered() {
+      const q = state.q.trim().toLowerCase();
+      let rows = state.all.filter((item) => {
+        if (state.cat !== "all" && !item.cats.includes(state.cat)) return false;
+        if (state.bug && !(item.Bugs || []).some((b) => b.toLowerCase() === state.bug)) return false;
+        if (q) {
+          const h = haystack(item).toLowerCase();
+          if (!h.includes(q)) return false;
+        }
+        return true;
+      });
+
+      rows.sort((a, b) => {
+        switch (state.sort) {
+          case "oldest":
+            return parseDate(a.PublicationDate) - parseDate(b.PublicationDate);
+          case "added":
+            return parseDate(b.AddedDate) - parseDate(a.AddedDate);
+          case "title":
+            return titleOf(a).localeCompare(titleOf(b));
+          case "newest":
+          default:
+            return parseDate(b.PublicationDate) - parseDate(a.PublicationDate);
+        }
+      });
+      return rows;
+    }
+
+    function renderStats(totalSource, kept) {
+      const web = kept.filter((i) => i.cats.includes("web")).length;
+      const mobile = kept.filter((i) => i.cats.includes("mobile")).length;
+      const api = kept.filter((i) => i.cats.includes("api")).length;
+      document.getElementById("stats").innerHTML =
+        `<span><strong>${kept.length}</strong> in scope</span>` +
+        `<span>web <strong>${web}</strong></span>` +
+        `<span>mobile <strong>${mobile}</strong></span>` +
+        `<span>api <strong>${api}</strong></span>` +
+        `<span>excluded <strong>${totalSource - kept.length}</strong> network/binary</span>`;
+    }
+
+    function fillBugFilter(items) {
+      const counts = new Map();
+      for (const item of items) {
+        for (const b of item.Bugs || []) {
+          counts.set(b, (counts.get(b) || 0) + 1);
+        }
+      }
+      const sel = document.getElementById("bugFilter");
+      const top = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+      sel.innerHTML = `<option value="">All bug classes (${top.length})</option>` +
+        top.map(([b, c]) => `<option value="${escapeAttr(b.toLowerCase())}">${escapeHtml(b)} (${c})</option>`).join("");
+    }
+
+    function escapeHtml(s) {
+      return String(s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+    function escapeAttr(s) {
+      return escapeHtml(s).replace(/'/g, "&#39;");
+    }
+
+    function render() {
+      const rows = filtered();
+      const size = state.pageSize;
+      const pages = Math.max(1, Math.ceil(rows.length / size));
+      if (state.page > pages) state.page = pages;
+      const start = (state.page - 1) * size;
+      const slice = rows.slice(start, start + size);
+      const list = document.getElementById("list");
+      const pager = document.getElementById("pager");
+
+      if (!slice.length) {
+        list.innerHTML = `<div class="empty">No writeups match these filters. Try another surface or clear search.</div>`;
+        pager.hidden = true;
+        return;
+      }
+
+      list.innerHTML = slice.map((item, idx) => {
+        const tags = item.cats.map((c) => `<span class="tag ${c}">${c}</span>`).join("");
+        const bugs = (item.Bugs || []).slice(0, 8).map((b) => `<span class="bug">${escapeHtml(b)}</span>`).join("");
+        const authors = (item.Authors || []).join(", ") || "Unknown";
+        const bounty = item.Bounty && item.Bounty !== "-" ? item.Bounty : null;
+        const programs = (item.Programs || []).slice(0, 3).join(", ");
+        const delay = Math.min(idx, 12) * 18;
+        return `
+          <article class="card" style="animation-delay:${delay}ms">
+            <div class="card-top">${tags}</div>
+            <h2 class="title"><a href="${escapeAttr(linkOf(item))}" target="_blank" rel="noopener noreferrer">${escapeHtml(titleOf(item))}</a></h2>
+            <div class="bugs">${bugs}</div>
+            <div class="foot">
+              <div>
+                <span class="authors">${escapeHtml(authors)}</span>
+                ${programs ? ` · <span>${escapeHtml(programs)}</span>` : ""}
+              </div>
+              <div class="mono">
+                ${bounty ? `<span class="bounty">${escapeHtml(bounty)}</span> · ` : ""}
+                ${escapeHtml(item.PublicationDate || "—")}
+              </div>
+            </div>
+          </article>`;
+      }).join("");
+
+      pager.hidden = false;
+      document.getElementById("pageInfo").textContent = `${state.page} / ${pages} · ${rows.length} results`;
+      document.getElementById("prev").disabled = state.page <= 1;
+      document.getElementById("next").disabled = state.page >= pages;
+    }
+
+    function bind() {
+      document.querySelectorAll(".filters .tab[data-cat]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".filters .tab[data-cat]").forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          state.cat = btn.dataset.cat;
+          state.page = 1;
+          render();
+        });
+      });
+
+      let t;
+      document.getElementById("q").addEventListener("input", (e) => {
+        clearTimeout(t);
+        t = setTimeout(() => {
+          state.q = e.target.value;
+          state.page = 1;
+          render();
+        }, 160);
+      });
+
+      document.getElementById("bugFilter").addEventListener("change", (e) => {
+        state.bug = e.target.value;
+        state.page = 1;
+        render();
+      });
+      document.getElementById("sort").addEventListener("change", (e) => {
+        state.sort = e.target.value;
+        state.page = 1;
+        render();
+      });
+      document.getElementById("pageSize").addEventListener("change", (e) => {
+        state.pageSize = Number(e.target.value) || 50;
+        state.page = 1;
+        render();
+      });
+      document.getElementById("prev").addEventListener("click", () => {
+        state.page -= 1;
+        render();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+      document.getElementById("next").addEventListener("click", () => {
+        state.page += 1;
+        render();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+      document.getElementById("clearBtn").addEventListener("click", () => {
+        state.q = "";
+        state.bug = "";
+        state.cat = "all";
+        state.sort = "newest";
+        state.page = 1;
+        document.getElementById("q").value = "";
+        document.getElementById("bugFilter").value = "";
+        document.getElementById("sort").value = "newest";
+        document.querySelectorAll(".filters .tab[data-cat]").forEach((b) => {
+          b.classList.toggle("active", b.dataset.cat === "all");
+        });
+        render();
+      });
+    }
+
+    async function init() {
+      const status = document.getElementById("status");
+      status.hidden = false;
+      status.textContent = "Loading reports.json…";
+      try {
+        const res = await fetch("reports.json", { cache: "no-store" });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        const raw = json.data || json;
+        const kept = [];
+        for (const item of raw) {
+          const cats = classify(item);
+          if (!cats) continue;
+          kept.push({ ...item, cats });
+        }
+        state.all = kept;
+        renderStats(raw.length, kept);
+        fillBugFilter(kept);
+        status.hidden = true;
+        bind();
+        render();
+      } catch (err) {
+        status.hidden = false;
+        status.className = "error";
+        status.textContent = `Could not load reports.json (${err.message}). Serve this folder over HTTP (e.g. python3 -m http.server).`;
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
