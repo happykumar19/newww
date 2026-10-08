@@ -1,0 +1,8 @@
+2026-10-05 15:53:00.254 [main] INFO Main - Starting Burp MCP proxy with SSE URL: http://localhost:9876
+2026-10-05 15:53:00.263 [main] INFO Main - No explicit authentication configured (will auto-detect OAuth 2.1)
+2026-10-05 15:53:00.279 [main] WARN Main - No authentication configured. The server may reject connections.
+2026-10-05 15:53:00.332 [main] INFO Main - No authentication configured, checking if server supports OAuth 2.1...
+2026-10-05 15:53:00.732 [main] WARN OAuth21Client - Using insecure HTTP for OAuth endpoints. This should only be used for development.
+2026-10-05 15:53:00.945 [main] INFO SseClient - Using non-OAuth authentication for SSE connection
+2026-10-05 15:53:01.232 [main] INFO SseClient - Successfully connected to SSE server at http://localhost:9876
+2026-10-05 15:53:01.271 [DefaultDispatcher-worker-2] INFO Server - Server connection closing

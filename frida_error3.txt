@@ -1,0 +1,33 @@
+Error: Implementation for checkServerTrusted expected return value compatible with void
+    at <anonymous> (/frida/bridges/java.js:8)
+    at <anonymous> (/frida/bridges/java.js:8)
+Error: Implementation for checkServerTrusted expected return value compatible with void
+    at <anonymous> (/frida/bridges/java.js:8)
+    at <anonymous> (/frida/bridges/java.js:8)
+Error: Implementation for checkServerTrusted expected return value compatible with void
+    at <anonymous> (/frida/bridges/java.js:8)
+    at <anonymous> (/frida/bridges/java.js:8)
+Error: Implementation for checkServerTrusted expected return value compatible with void
+    at <anonymous> (/frida/bridges/java.js:8)
+    at <anonymous> (/frida/bridges/java.js:8)
+Error: Implementation for checkServerTrusted expected return value compatible with void
+    at <anonymous> (/frida/bridges/java.js:8)
+    at <anonymous> (/frida/bridges/java.js:8)
+Error: Implementation for checkServerTrusted expected return value compatible with void
+    at <anonymous> (/frida/bridges/java.js:8)
+    at <anonymous> (/frida/bridges/java.js:8)
+Error: Implementation for checkServerTrusted expected return value compatible with void
+    at <anonymous> (/frida/bridges/java.js:8)
+    at <anonymous> (/frida/bridges/java.js:8)
+Error: Implementation for checkServerTrusted expected return value compatible with void
+    at <anonymous> (/frida/bridges/java.js:8)
+    at <anonymous> (/frida/bridges/java.js:8)
+Error: Implementation for checkServerTrusted expected return value compatible with void
+    at <anonymous> (/frida/bridges/java.js:8)
+    at <anonymous> (/frida/bridges/java.js:8)
+Error: Implementation for checkServerTrusted expected return value compatible with void
+    at <anonymous> (/frida/bridges/java.js:8)
+    at <anonymous> (/frida/bridges/java.js:8)
+Error: Implementation for checkServerTrusted expected return value compatible with void
+    at <anonymous> (/frida/bridges/java.js:8)
+    at <anonymous> (/frida/bridges/java.js:8)

@@ -1,0 +1,34 @@
+     ____
+    / _  |   Frida 17.17.0 - A world-class dynamic instrumentation toolkit
+   | (_| |
+    > _  |   Commands:
+   /_/ |_|       help      -> Displays the help system
+   . . . .       object?   -> Display information about 'object'
+   . . . .       exit/quit -> Exit
+   . . . .
+   . . . .   Prefer a GUI? Luma is the official Frida app, with a live REPL,
+   . . . .   persistent sessions & collaboration. https://luma.frida.re/
+   . . . .
+   . . . .   Connected to Android Emulator 5554 (id=emulator-5554)
+Spawning `com.aratai.chat`...
+Spawned `com.aratai.chat`. Resuming main thread!
+[Android Emulator 5554::com.aratai.chat ]-> [*] Arattai SSL Pinning Bypass v2 loaded
+[*] Proxy: 10.0.2.2:8080 (Burp Suite)
+[*] SSLContext.init hooked
+[*] Conscrypt Platform hooked
+[*] Conscrypt engine variant hooked
+[*] HttpsURLConnection hooked
+[!] Found OkHttp pinner class: com.android.okhttp.CertificatePinner
+[!] Found OkHttp pinner class: com.android.okhttp.CertificatePinner$Builder
+[*] Traffic logger hooked (arattai/zoho endpoints)
+[*] TrustManagerImpl.verifyChain hooked
+[*] All SSL bypass hooks installed successfully
+[*] Traffic should now flow through Burp at 10.0.2.2:8080
+[TRAFFIC] jar:file:/data/app/~~7oCMRmIB14Cbo9Lq-RTioQ==/com.aratai.chat-Gc-UL4cJaNvLgGdKFrDaVw==/base.apk!/META-INF/services/whh
+[+] SSLContext.init() bypassed - injecting permissive TrustManager
+[+] SSLContext.init() bypassed - injecting permissive TrustManager
+[+] Conscrypt checkServerTrusted bypassed for engine
+[TRAFFIC] jar:file:/data/app/~~7oCMRmIB14Cbo9Lq-RTioQ==/com.aratai.chat-Gc-UL4cJaNvLgGdKFrDaVw==/base.apk!/META-INF/services/io.jsonwebtoken.io.Serializer
+[TRAFFIC] https://apptics.zoho.in/sdk/v1/60047369915/453000000002061/getupdates?frameworkid=5889&appversionid=453000220075406&deviceid=d0a7b24cae080e6d7c32cda8234f7d95
+[+] Conscrypt checkServerTrusted bypassed for engine
+[*] Class enumeration complete

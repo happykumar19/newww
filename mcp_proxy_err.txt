@@ -1,0 +1,12 @@
+2026-10-05 15:52:33.772 [main] INFO Main - Starting Burp MCP proxy with SSE URL: https://localhost:9876
+2026-10-05 15:52:33.778 [main] INFO Main - No explicit authentication configured (will auto-detect OAuth 2.1)
+2026-10-05 15:52:33.794 [main] WARN Main - No authentication configured. The server may reject connections.
+2026-10-05 15:52:33.848 [main] INFO Main - No authentication configured, checking if server supports OAuth 2.1...
+2026-10-05 15:52:34.569 [main] INFO SseClient - Using non-OAuth authentication for SSE connection
+2026-10-05 15:52:34.608 [main] ERROR SseClient - Failed to connect to SSE server at https://localhost:9876: Invalid TLS record type code: 72
+2026-10-05 15:52:34.620 [main] WARN Main - Please check if the server is running and the URL is correct
+2026-10-05 15:52:34.620 [DefaultDispatcher-worker-10] INFO SseClient - Starting to monitor SSE server availability...
+2026-10-05 15:52:34.620 [main] INFO Main - Will attempt to reconnect automatically when needed
+2026-10-05 15:52:34.653 [DefaultDispatcher-worker-10] ERROR StdioServerTransport - Error writing to stdout
+kotlinx.coroutines.JobCancellationException: StandaloneCoroutine was cancelled; job=StandaloneCoroutine{Cancelling}@10455bb2
+2026-10-05 15:52:34.655 [DefaultDispatcher-worker-10] INFO Server - Server connection closing
